@@ -1,5 +1,5 @@
 # Use a imagem oficial do Node.js como imagem base
-FROM node:14
+FROM node:18
 
 # Defina um diretório de trabalho no contêiner
 WORKDIR /app
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Execute o comando npm start (ou yarn start) para iniciar o servidor da aplicação
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
