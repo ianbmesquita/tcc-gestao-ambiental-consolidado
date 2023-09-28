@@ -13,9 +13,6 @@ RUN npm install
 # Copie todos os arquivos do projeto para o diretório de trabalho no contêiner
 COPY . .
 
-# Execute o comando npm run build (ou yarn build) para criar a versão de produção do seu aplicativo
-RUN npm run build
-
 # Exponha a porta em que a aplicação Next.js será executada (geralmente 3000)
 EXPOSE 3000
 
