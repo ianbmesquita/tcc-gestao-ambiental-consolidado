@@ -1,0 +1,103 @@
+version: '3'
+services:
+  mysql-db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=sigamTCC2023
+      - MYSQL_DATABASE=db_auth
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=sigamTCC2023
+    volumes:
+      - C:/Docker/mysql-conf:/etc/mysql/conf.d
+      - C:/Docker/mysql-data:/var/lib/mysql
+    networks:
+      - common-network
+      
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq-container
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=sigam-usr
+      - RABBITMQ_DEFAULT_PASS=sigam-pwd
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - common-network
+
+  sigam-front-app:
+    build:
+      context: ./tcc-gestao-ambiental-front/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - common-network
+
+  sigam-autenticacao-app:
+    build:
+      context: ./tcc-gestao-ambiental-autenticacao/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod 
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_auth
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=sigamTCC2023
+      - API_SECURITY_TOKEN_SECRET=1cf0d244-e2d8-48e7-baa7-3defe6fa5684
+    depends_on:
+      - mysql-db
+    networks:
+      - common-network
+
+  sigam-monitoramento-app:
+    build:
+      context: ./tcc-gestao-ambiental-monitoramento-barragens/
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod 
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_monitoramento
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=sigamTCC2023
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=sigam-usr
+      - SPRING_RABBITMQ_PASSWORD=sigam-pwd
+      - API_SECURITY_TOKEN_SECRET=1cf0d244-e2d8-48e7-baa7-3defe6fa5684
+    depends_on:
+      - mysql-db
+      - rabbitmq
+    networks:
+      - common-network
+
+  sigam-comunicacao-app:
+    build:
+      context: ./tcc-gestao-ambiental-comunicacao-seguranca/
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - HOST_QUEUE=rabbitmq 
+      - USERNAME_QUEUE=sigam-usr
+      - PASSWORD_QUEUE=sigam-pwd
+      - USER_MAIL=ian.mesquita.demo@gmail.com
+      - PASSWORD_MAIL=pijo mgrn cgrs rpot
+    depends_on:
+      - rabbitmq
+    networks:
+      - common-network
+
+volumes:
+  rabbitmq-data:
+
+networks:
+  common-network:
+    driver: bridge

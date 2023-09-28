@@ -1,0 +1,13 @@
+.mainContainer {
+    padding: 15px;
+    margin-left: 300px;
+    margin-right: 100px;
+    color: #000;
+}
+
+@media screen and (max-width: 600px) {
+    .mainContainer {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
