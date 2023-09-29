@@ -27,6 +27,7 @@ interface Barragem {
 }
 
 interface Estado {
+    id: number;
     sigla: string;
     nome: string;
 }
@@ -77,7 +78,7 @@ export function HabitanteForm({ handleOnSubmitFunction, habitanteFormData }: Hab
                 if (response.status === 200) {
                     const localidade = response.data
                     
-                    setCep(localidade.cep)
+                    setCep(localidade.cep.replace('-', ''))
                     setLogradouro(localidade.logradouro)
                     setBairro(localidade.bairro)
                     setMunicipio(localidade.cidade)
@@ -115,11 +116,7 @@ export function HabitanteForm({ handleOnSubmitFunction, habitanteFormData }: Hab
     };
 
     async function fetchHabitanteDataPage(token: string | null) {
-        await api2.get("api/v1/habitantes/info", {
-            headers:{
-                Authorization:  'Bearer ' + token
-            }
-        })
+        await api2.get("api/v1/habitantes/info")
         .then(response => {
             if (response.status === 200) {
                 console.log(response.data)

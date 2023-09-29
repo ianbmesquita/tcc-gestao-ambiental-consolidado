@@ -6,65 +6,42 @@ import Layout from '@/components/layout/layout'
 
 import api2 from '@/pages/api/api2'
 import styles from '../../styles/CadastroUsuarios.module.css'
-import { HabitanteForm } from '@/components/forms/habitanteForm'
-
-interface Endereco {
-    cep: string;
-    logradouro: string;
-    numero?: string;
-    bairro: string;
-    municipio: string;
-    estado: string;
-}
+import { AvaliacaoForm } from '@/components/forms/avaliacaoForm'
 
 interface FormData {
-    nome: string;
-    nascimento: string;
-    telefone: string;
-    email: string;
-    idBarragem: string;
-    endereco: Endereco;
+    idBarragem: number;
+    dataHora: string;
+    grauRisco: string;
+    alerta: string;
+    origem: string;
 }
 
-export default function CadastroHabitante() {
+export default function CadastroAvaliacao() {
     const router = useRouter()
 
     const [authChecked, setAuthChecked] = useState(false);
     const [formData, setFormData] = useState<FormData>({
-        nome: '',
-        nascimento: '',
-        telefone: '',
-        email: '',
-        idBarragem: '',
-        endereco: {
-            cep: '',
-            logradouro: '',
-            numero: '',
-            bairro: '',
-            municipio: '',
-            estado: '',
-        }
+        idBarragem: 0,
+        dataHora: '',
+        grauRisco: '',
+        alerta: '',
+        origem: ''
     })
 
-    async function handleNewHabitante(formData: FormData) {
+    async function handleNewAvaliacao(formData: FormData) {
         const token = localStorage.getItem('token')
 
+        console.log(formData)
+
         const data = {
-            nome: formData.nome,
-            nascimento: formData.nascimento,
-            telefone: formData.telefone,
-            email: formData.email,
+            dataHora: formData.dataHora,
+            grauRisco: formData.grauRisco,
+            alerta: formData.alerta,
+            origem: formData.origem,
             idBarragem: formData.idBarragem,
-            endereco: {
-                cep: formData.endereco.cep,
-                logradouro: formData.endereco.logradouro,
-                numero: formData.endereco.numero,
-                municipio: formData.endereco.municipio,
-                estado: formData.endereco.estado,
-            }
         }
 
-        await api2.post("api/v1/habitantes", data, {
+        await api2.post("api/v1/incidentes", data, {
             headers:{
                 Authorization:  'Bearer ' + token
             }
@@ -73,18 +50,18 @@ export default function CadastroHabitante() {
             if (response.status === 201) {
                 Swal.fire({
                     title: 'Sucesso!',
-                    text: 'Habitante cadastrado com sucesso',
+                    text: 'Avaliação cadastrada com sucesso',
                     icon: 'success',
                     confirmButtonText: 'Ok'
                   })
     
-                  router.push("/habitantes/listagem")
+                  router.push("/avaliacoes/listagem")
             }
         })
         .catch(error => {
             Swal.fire({
                 title: 'Erro!',
-                text: 'Ocorreu erro ao cadastrar o habitante',
+                text: 'Ocorreu erro ao cadastrar a avaliação',
                 icon: 'error',
                 confirmButtonText: 'Ok'
               })
@@ -109,10 +86,10 @@ export default function CadastroHabitante() {
         <div>
             <Layout>
                 <div className="text-2xl lg:text-3xl font-bold text-gray-800 mb-10 mt-14 lg:mt-10 text-center lg:text-left">
-                    <span className={styles.text}>Cadastro de Habitante</span> 
+                    <span className={styles.text}>Cadastro de Avaliação</span> 
                 </div>
                 <div>
-                    <HabitanteForm handleOnSubmitFunction={handleNewHabitante} habitanteFormData={formData} />
+                    <AvaliacaoForm handleOnSubmitFunction={handleNewAvaliacao} avaliacaoFormData={formData} />
                 </div>
             </Layout>  
         </div> 
