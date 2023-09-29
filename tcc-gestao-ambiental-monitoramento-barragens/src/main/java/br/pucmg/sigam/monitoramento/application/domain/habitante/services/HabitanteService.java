@@ -1,9 +1,11 @@
 package br.pucmg.sigam.monitoramento.application.domain.habitante.services;
 
 import br.pucmg.sigam.monitoramento.api.dtos.HabitanteEmailResponseDTO;
+import br.pucmg.sigam.monitoramento.api.dtos.HabitanteInfoResponseDTO;
 import br.pucmg.sigam.monitoramento.api.dtos.HabitanteRequestDTO;
 import br.pucmg.sigam.monitoramento.api.dtos.HabitanteResponseDTO;
 import br.pucmg.sigam.monitoramento.application.domain.habitante.mappers.HabitanteMapper;
+import br.pucmg.sigam.monitoramento.application.domain.localidade.service.LocalidadeService;
 import br.pucmg.sigam.monitoramento.infra.dataproviders.repositories.BarragemRepository;
 import br.pucmg.sigam.monitoramento.infra.dataproviders.repositories.HabitanteRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,10 +26,26 @@ public class HabitanteService {
     private BarragemRepository barragemRepository;
 
     @Autowired
+    private LocalidadeService localidadeService;
+
+    @Autowired
     private HabitanteMapper mapper;
+
+    public HabitanteInfoResponseDTO getDataFormHabitantes() {
+        var barragens = barragemRepository.findAll();
+        var estados = localidadeService.consultarEstadosBrasileiros();
+        return mapper.convertDataToHabitanteInfoResponseDTO(barragens, estados);
+    }
 
     public List<HabitanteResponseDTO> getAllHabitantes() {
         return mapper.convertListHabitanteEntityToListHabitanteResponseDTO(habitanteRepository.findAll());
+    }
+
+    public HabitanteResponseDTO getHabitanteById(final Long id) {
+        var habitante = habitanteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(HABITANTE_NAO_ENCONTRADO, id)));
+
+        return mapper.convertHabitanteEntityToHabitanteResponseDTO(habitante);
     }
 
     public HabitanteResponseDTO saveNewHabitante(final HabitanteRequestDTO requestDTO) {

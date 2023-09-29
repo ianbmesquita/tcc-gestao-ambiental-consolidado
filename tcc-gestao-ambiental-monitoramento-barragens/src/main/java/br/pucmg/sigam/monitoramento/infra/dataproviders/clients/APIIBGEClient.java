@@ -5,9 +5,11 @@ import br.pucmg.sigam.monitoramento.application.domain.localidade.models.Localid
 import br.pucmg.sigam.monitoramento.application.domain.localidade.models.Municipio;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -21,11 +23,11 @@ public class APIIBGEClient {
     private final String IBGE_ESTADOS_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados";
     private final String IBGE_MUNICIPIOS_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/%s/municipios";
 
-    public List<LinkedHashMap<String, String>> getEstados() {
-        var estados = restTemplate.getForObject(IBGE_ESTADOS_URL, List.class);
+    public List<Estado> getEstados() {
+        var response = restTemplate.getForEntity(IBGE_ESTADOS_URL, Estado[].class);
 
-        if (!estados.isEmpty()) {
-            return estados;
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return Arrays.asList(response.getBody());
         }
 
         throw new EntityNotFoundException(ERRO_CONSULTA_ESTADOS);

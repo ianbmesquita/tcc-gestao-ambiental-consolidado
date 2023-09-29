@@ -37,9 +37,14 @@ public class Endereco {
 
     @NotNull
     @Column
+    private String bairro;
+
+    @NotNull
+    @Column
     private String municipio;
 
     @NotNull
     @Column
     private String estado;
+
 }

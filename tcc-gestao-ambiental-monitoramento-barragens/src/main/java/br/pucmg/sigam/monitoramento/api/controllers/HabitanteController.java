@@ -1,5 +1,6 @@
 package br.pucmg.sigam.monitoramento.api.controllers;
 
+import br.pucmg.sigam.monitoramento.api.dtos.HabitanteInfoResponseDTO;
 import br.pucmg.sigam.monitoramento.api.dtos.HabitanteRequestDTO;
 import br.pucmg.sigam.monitoramento.api.dtos.HabitanteResponseDTO;
 import br.pucmg.sigam.monitoramento.application.domain.habitante.services.HabitanteService;
@@ -18,10 +19,21 @@ public class HabitanteController {
     @Autowired
     private HabitanteService service;
 
+    @GetMapping("/info")
+    public ResponseEntity<HabitanteInfoResponseDTO> getDataFormHabitantes() {
+        return ResponseEntity.ok().body(service.getDataFormHabitantes());
+    }
+
     @PreAuthorize("hasRole('USER')")
     @GetMapping
     public ResponseEntity<List<HabitanteResponseDTO>> getAllHabitantes() {
         return ResponseEntity.ok().body(service.getAllHabitantes());
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/{id}")
+    public ResponseEntity<HabitanteResponseDTO> getHabitanteById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(service.getHabitanteById(id));
     }
 
     @PostMapping

@@ -29,6 +29,9 @@ public class EnderecoRequestDTO {
     private String complemento;
 
     @NotBlank
+    private String bairro;
+
+    @NotBlank
     private String municipio;
 
     @NotBlank

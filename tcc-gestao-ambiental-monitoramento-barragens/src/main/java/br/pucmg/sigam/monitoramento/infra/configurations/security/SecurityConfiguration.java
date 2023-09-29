@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/localidade/estados/{id}/municipios").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/sensores/{id}/leitura").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/habitantes").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/habitantes/info").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationJwtFilter(), UsernamePasswordAuthenticationFilter.class)

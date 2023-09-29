@@ -15,6 +15,7 @@ public class EnderecoResponseDTO {
     private String logradouro;
     private Integer numero;
     private String complemento;
+    private String bairro;
     private String municipio;
     private String estado;
 }

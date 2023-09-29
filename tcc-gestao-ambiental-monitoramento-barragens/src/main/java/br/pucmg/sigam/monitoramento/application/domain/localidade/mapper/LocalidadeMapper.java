@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class LocalidadeMapper {
@@ -26,8 +25,16 @@ public class LocalidadeMapper {
                 .build();
     }
 
-    public List<EstadoResponseDTO> convertListEstadoEntityToListEstadoResponseDTO(final List<LinkedHashMap<String, String>> mapas) {
+    public List<EstadoResponseDTO> convertListEstadoEntityToListEstadoResponseDTO(final List<Estado> estados) {
         var estadosDTO = new ArrayList<EstadoResponseDTO>();
+
+        for (Estado estado : estados) {
+            estadosDTO.add(EstadoResponseDTO.builder()
+                            .id(estado.getId())
+                            .sigla(estado.getSigla())
+                            .nome(estado.getNome())
+                            .build());
+        }
 
         return estadosDTO;
     }
