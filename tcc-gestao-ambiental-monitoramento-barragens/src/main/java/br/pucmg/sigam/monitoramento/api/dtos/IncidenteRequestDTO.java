@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
@@ -26,8 +27,8 @@ public class IncidenteRequestDTO {
 
     @NotNull
     @PastOrPresent
-    @DateTimeFormat(iso = DATE_TIME)
-    private LocalDateTime dataHora;
+    @DateTimeFormat(iso = DATE)
+    private LocalDate dataHora;
 
     @NotBlank
     private String grauRisco;

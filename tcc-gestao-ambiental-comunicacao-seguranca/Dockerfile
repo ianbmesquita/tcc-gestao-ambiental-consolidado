@@ -1,8 +1,10 @@
 # Use a imagem oficial do Node.js como base
-FROM node:18
+FROM node:18-alpine3.18
+
+RUN mkdir -p /home/app
 
 # Crie um diretório de trabalho no contêiner
-WORKDIR /app
+WORKDIR /home/app
 
 # Copie os arquivos de dependência
 COPY package*.json ./

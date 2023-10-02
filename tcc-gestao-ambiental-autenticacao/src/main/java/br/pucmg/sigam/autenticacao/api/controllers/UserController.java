@@ -30,7 +30,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> editUserById(@Valid @RequestBody UserRequestDTO userRequestDTO,
                                                         @PathVariable Long id) {
-        return new ResponseEntity<>(null);
+        return ResponseEntity.ok().body(service.editUserById(id, userRequestDTO));
     }
 
     @DeleteMapping("/{id}")

@@ -40,8 +40,7 @@ public class BarragemController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/{id}")
     public ResponseEntity<BarragemResponseDTO> editBarragemById(@PathVariable Long id,
-                                                                @Valid @RequestBody BarragemRequestDTO requestDTO)
-            throws Exception {
+                                                                @Valid @RequestBody BarragemRequestDTO requestDTO) {
         return ResponseEntity.ok().body(service.editBarragem(id, requestDTO));
     }
 

@@ -15,10 +15,8 @@ services:
     networks:
       - common-network
       
-  rabbitmq:
+  rabbitmq-broker:
     image: "rabbitmq:3-management"
-    container_name: rabbitmq-container
-    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -36,6 +34,20 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    networks:
+      - common-network
+
+  sigam-api-gateway-app:
+    build:
+      context: ./tcc-gestao-ambiental-api-gateway/
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - JWT_VALIDATION_SECRET=1cf0d244-e2d8-48e7-baa7-3defe6fa5684
+      - AUTH_HOST=http://sigam-autenticacao-app:8081
+    depends_on:
+      - sigam-autenticacao-app
     networks:
       - common-network
 
@@ -67,14 +79,14 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/db_monitoramento
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=sigamTCC2023
-      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_HOST=rabbitmq-broker
       - SPRING_RABBITMQ_PORT=5672
       - SPRING_RABBITMQ_USERNAME=sigam-usr
       - SPRING_RABBITMQ_PASSWORD=sigam-pwd
       - API_SECURITY_TOKEN_SECRET=1cf0d244-e2d8-48e7-baa7-3defe6fa5684
     depends_on:
       - mysql-db
-      - rabbitmq
+      - rabbitmq-broker
     networks:
       - common-network
 
@@ -85,13 +97,13 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - HOST_QUEUE=rabbitmq 
+      - HOST_QUEUE=rabbitmq-broker 
       - USERNAME_QUEUE=sigam-usr
       - PASSWORD_QUEUE=sigam-pwd
       - USER_MAIL=ian.mesquita.demo@gmail.com
       - PASSWORD_MAIL=pijo mgrn cgrs rpot
     depends_on:
-      - rabbitmq
+      - rabbitmq-broker
     networks:
       - common-network
 

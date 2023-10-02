@@ -1,5 +1,6 @@
 package br.pucmg.sigam.monitoramento.api.controllers;
 
+import br.pucmg.sigam.monitoramento.api.dtos.IncidenteInfoResponse;
 import br.pucmg.sigam.monitoramento.api.dtos.IncidenteRequestDTO;
 import br.pucmg.sigam.monitoramento.api.dtos.IncidenteResponseDTO;
 import br.pucmg.sigam.monitoramento.application.domain.incidente.services.IncidenteService;
@@ -21,6 +22,12 @@ import java.util.List;
 public class IncidenteController {
     @Autowired
     private IncidenteService service;
+
+    @PreAuthorize("hasRole('OUTSOURCED')")
+    @GetMapping("/info")
+    public ResponseEntity<IncidenteInfoResponse> getDataFormHabitantes() {
+        return ResponseEntity.ok().body(service.getDataFormHabitantes());
+    }
 
     @PreAuthorize("hasRole('OUTSOURCED')")
     @GetMapping

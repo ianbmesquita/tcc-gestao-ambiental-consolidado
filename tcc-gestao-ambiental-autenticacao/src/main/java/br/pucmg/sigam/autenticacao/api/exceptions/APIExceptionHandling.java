@@ -19,7 +19,6 @@ import java.util.List;
 
 @ControllerAdvice(annotations = RestController.class)
 public class APIExceptionHandling extends ResponseEntityExceptionHandler {
-
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<APIError> handleEntityNotFoundException(EntityNotFoundException exception) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
@@ -49,9 +48,10 @@ public class APIExceptionHandling extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
-                                                                  HttpHeaders headers, HttpStatusCode status,
-                                                                  WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception,
+                                                                  final HttpHeaders headers,
+                                                                  final HttpStatusCode status,
+                                                                  final WebRequest request) {
         List<FieldError> errors = new ArrayList<>();
 
         exception.getBindingResult().getFieldErrors().forEach(fieldError -> {

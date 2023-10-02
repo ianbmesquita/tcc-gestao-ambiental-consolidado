@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IncidenteResponseDTO {
     private Long id;
-    private LocalDateTime dataHora;
+    private LocalDate dataHora;
     private String grauRisco;
     private String tipo;
     private String origem;

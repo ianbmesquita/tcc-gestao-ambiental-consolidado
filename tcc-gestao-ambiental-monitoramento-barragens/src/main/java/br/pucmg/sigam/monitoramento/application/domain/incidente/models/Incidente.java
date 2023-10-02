@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table(name = "incidentes")
@@ -25,7 +26,7 @@ public class Incidente {
 
     @NotNull
     @Column
-    private LocalDateTime dataHora;
+    private LocalDate dataHora;
 
     @NotNull
     @Column

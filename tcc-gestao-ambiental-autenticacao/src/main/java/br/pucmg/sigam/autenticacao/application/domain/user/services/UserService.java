@@ -31,7 +31,7 @@ public class UserService {
         return mapper.convertUserEntityToUserResponseDTO(user);
     }
 
-    public UserResponseDTO editUser(final Long id, final UserRequestDTO requestDTO) {
+    public UserResponseDTO editUserById(final Long id, final UserRequestDTO requestDTO) {
         var userSolicitado = repository.findById(String.valueOf(id))
                 .orElseThrow(() -> new EntityNotFoundException(String.format(USUARIO_ID_NAO_ENCONTRADO, id)));
 

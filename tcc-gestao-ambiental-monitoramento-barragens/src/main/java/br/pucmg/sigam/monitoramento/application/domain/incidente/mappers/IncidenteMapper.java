@@ -1,7 +1,6 @@
 package br.pucmg.sigam.monitoramento.application.domain.incidente.mappers;
 
-import br.pucmg.sigam.monitoramento.api.dtos.IncidenteRequestDTO;
-import br.pucmg.sigam.monitoramento.api.dtos.IncidenteResponseDTO;
+import br.pucmg.sigam.monitoramento.api.dtos.*;
 import br.pucmg.sigam.monitoramento.application.domain.barragem.mappers.BarragemMapper;
 import br.pucmg.sigam.monitoramento.application.domain.barragem.models.Barragem;
 import br.pucmg.sigam.monitoramento.application.domain.barragem.models.ClassificacaoRisco;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -68,5 +68,29 @@ public class IncidenteMapper {
                 .idBarragem(incidente.getBarragem().getId().toString())
                 .nomeBarragem(incidente.getBarragem().getNome())
                 .build());
+    }
+
+    public IncidenteInfoResponse convertDataToHabitanteInfoResponseDTO(final List<Barragem> barragens) {
+        return IncidenteInfoResponse.builder()
+                .barragens(barragemMapper.convertListBarragemEntityToListBarragemResponseDTO(barragens))
+                .riscos(Arrays.asList(ClassificacaoRisco.values()).stream().map(risco -> {
+                    return ClassificacaoRiscoResponseDTO.builder()
+                            .valor(risco.name())
+                            .risco(risco.getRisco())
+                            .build();
+                }).toList())
+                .incidentes(Arrays.asList(TipoIncidente.values()).stream().map(incidente -> {
+                    return TipoIncidenteResponseDTO.builder()
+                            .valor(incidente.name())
+                            .tipo(incidente.getTipo())
+                            .build();
+                }).toList())
+                .origens(Arrays.asList(TipoOrigem.values()).stream().map(origem -> {
+                    return TipoOrigemResponseDTO.builder()
+                            .valor(origem.name())
+                            .tipo(origem.getTipo())
+                            .build();
+                }).toList())
+                .build();
     }
 }

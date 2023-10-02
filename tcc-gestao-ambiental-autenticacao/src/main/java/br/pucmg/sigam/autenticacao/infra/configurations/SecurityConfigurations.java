@@ -22,7 +22,8 @@ public class SecurityConfigurations {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity)
+            throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
@@ -40,7 +41,8 @@ public class SecurityConfigurations {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(final AuthenticationConfiguration authConfiguration)
+            throws Exception {
         return authConfiguration.getAuthenticationManager();
     }
 

@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exponha a porta em que a aplicação Next.js será executada (geralmente 3000)
-EXPOSE 3000
+EXPOSE 3003
 
 # Execute o comando npm start (ou yarn start) para iniciar o servidor da aplicação
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

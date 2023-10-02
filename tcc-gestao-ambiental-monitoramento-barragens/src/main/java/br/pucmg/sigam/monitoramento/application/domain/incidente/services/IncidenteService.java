@@ -1,5 +1,6 @@
 package br.pucmg.sigam.monitoramento.application.domain.incidente.services;
 
+import br.pucmg.sigam.monitoramento.api.dtos.IncidenteInfoResponse;
 import br.pucmg.sigam.monitoramento.api.dtos.IncidenteRequestDTO;
 import br.pucmg.sigam.monitoramento.api.dtos.IncidenteResponseDTO;
 import br.pucmg.sigam.monitoramento.application.domain.barragem.models.ClassificacaoRisco;
@@ -49,5 +50,10 @@ public class IncidenteService {
         } catch (AmqpException | JsonProcessingException exception) {
             throw new AmqpException("Erro ao enviar a mensagem para o tópico: ", exception.getCause());
         }
+    }
+
+    public IncidenteInfoResponse getDataFormHabitantes() {
+        var barragens = barragemRepository.findAll();
+        return mapper.convertDataToHabitanteInfoResponseDTO(barragens);
     }
 }
